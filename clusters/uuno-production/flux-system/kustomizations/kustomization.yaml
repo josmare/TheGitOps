@@ -1,7 +1,3 @@
 resources:
   - infra-bootstrap.yaml
   - infra-controllers.yaml
-  - infra-monitoring.yaml
-
-  - production.yaml
-  - staging.yaml
