@@ -1,0 +1,89 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ingress-nginx
+  namespace: flux-system
+spec:
+  chart:
+    spec:
+      chart: ingress-nginx
+      interval: 6h0m0s
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: ingress-nginx
+      version: "4.13.2" # 1.13.2
+  install:
+    createNamespace: true
+    timeout: 10m
+  interval: 6h0m0s
+  targetNamespace: ingress-nginx
+  values:
+    controller:
+      allowSnippetAnnotations: false
+      config:
+        allow-snippet-annotations: "false"
+        annotations-risk-level: "Critical"
+        proxy-body-size: 20m
+        # Enable the four here and the outbound_proxy_protocol below for transmitting
+        # the REAL ip of the source all the way to the backend
+        use-forwarded-headers: "true"
+        compute-full-forwarded-for: "true"
+        use-proxy-protocol: "true"
+        real-ip-header: "proxy_protocol"
+      ingressClassResource:
+        default: true
+      kind: DaemonSet
+      service:
+        annotations:
+          service.beta.kubernetes.io/upcloud-load-balancer-config: |
+            {
+              "name": "uuno-production",
+              "frontends": [
+                {
+                  "name": "https",
+                  "mode": "tcp",
+                  "port": 443
+                },
+                {
+                  "name": "http",
+                  "mode": "tcp",
+                  "port": 80
+                }
+              ],
+              "backends": [
+                {
+                  "name": "https",
+                  "properties": {
+                    "outbound_proxy_protocol": "v2"
+                  }
+                },
+                {
+                  "name": "http",
+                  "properties": {
+                    "outbound_proxy_protocol": "v2"
+                  }
+                }
+              ]
+            }
+        enabled: true
+      terminationGracePeriodSeconds: 30
+      watchIngressWithoutClass: true
+      # Define here if you want to run the ingress controller on just
+      # some specific machines
+      # affinity:
+      #   nodeAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       nodeSelectorTerms:
+      #         - matchExpressions:
+      #             - key: web
+      #               operator: Exists
+
+      # Metrics exposed for Prometheus
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+          additionalLabels:
+            release: "prometheus"
