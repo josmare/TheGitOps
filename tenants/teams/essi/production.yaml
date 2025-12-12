@@ -1,0 +1,52 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    toolkit.fluxcd.io/tenant: essi-team
+  name: production-essi
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    toolkit.fluxcd.io/tenant: essi-team
+  name: essi-team
+  namespace: production-essi
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    toolkit.fluxcd.io/tenant: essi-team
+  name: essi-team-reconciler
+  namespace: production-essi
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: gotk:essi-team:reconciler
+  - kind: ServiceAccount
+    name: essi-team
+    namespace: flux-essi
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: essi-production-fks
+  namespace: flux-essi
+spec:
+  interval: 10m0s
+  path: ./envs/production
+  prune: true
+  serviceAccountName: essi-team
+  targetNamespace: production-essi
+  sourceRef:
+    kind: GitRepository
+    name: essi-gitops

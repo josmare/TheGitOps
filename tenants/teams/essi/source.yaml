@@ -1,0 +1,36 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    toolkit.fluxcd.io/tenant: essi-team
+  name: flux-essi
+
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: gitops-token
+  namespace: flux-essi
+spec:
+  encryptedData:
+    password: AgCRHvr4ZyoX1syykyKrvb3qDTFTImFEKesHAW6AqSCWeNyfGsr1w5ivT0kaGYTrYVHYPsxq2v+Fu521tI71mN5WgFiKCdlBckeSxeMXFmMFXS+J+wIF3rNgnsmlnLi9nhWxdfgyF8Iyzn9RjGkZF4L2RnXLx4bKufU6R4UlWHr+B2Y8KXRd4Tz1GsUwhS59dWGROdZEVMdhC+8CZq7/qkglaptqKF0CqFi5rfKXFgMtW9QZrgjlDgmplqKCMTa2+vxxksRQGxsDcuhTedtT/0KMnOcpQsYq5YbjvQFjrYU5SDIuEpmJK2ggew0r/whNjKe1RC1qO7kPEPJnwk6nDs+o/oCQLx7fv6z9P4m2Tr+gPjvhpE905mXAiriC5Giz2Qdjf87K7thpkNALMJZJhu8P7nzRIRDGwu2S1dRZ+vP/FlzFLqJOTmhLZdpSDE/KisqAgHT/IhIm3baXWoR/duUdwNJBLORldK/08K9YltkZwObOKl017i41Tn7PmRXNCF3R2LzDa/GPGwZVVKxxp8jzVkjjjNp6kuVRHJlN/Hdgr5UDViEVgizlOgZBPa12dMoWRC4dXgp3LLsYEMtaSStYA6BN72O2zymjDVKhQ4/gmJgb5enixVn5jLyQLCQd9+SIj3rZAtOcJ0zWhBXoEr3e4WVoiVVZH7Nd6JouBv5WBcjcf8d5K0SJM9lM1Vwf8/BM7Lwtrwl8cu7IlP3A83z/H0kJiSaNkmLHr32xoRgVhzKCUk439OBb
+    username: AgB5nRbscFUlb6NeYVbkA/6CbZoOSiIRksx48ahJYylMZXCfe1pIj1NzNHA7jaYnDhyt5nY+uqnO5pxa1azMRWQXlKpc0F+1Ml7QLcjnJOdEFlkV1RvF3NWQFuMZODadRaeIzw5DIy3Ta9fzHA61f3NZtKvpHbqLanOPXRTlj95TrczpMOomFFNvcnRpKHg91siprRj7Yr9Qlej7Z+qckuyYBkzvhFohpaH/Mc/sSd5OuzMXzWZOp9ao2umnbfejF2JEznJEB6wnQAkqlRLW4LP75mXNNVYSae9gmIvrL9sb3v3KfC01HmGsoUugkqrRYSwLm2BsY+5FnzW7WiV6k1LJMsWsKwJi2Ky8oW0ODcJlT5qfeXficzvLllFAfz47pAlr54+sAP1um8KjpMTq1LH0Yuhp+wsszeeTP8pHrCPpE1D/p7heFmVDLJ+24DxfDIkFqY7Edy62IsE9M/B73erzf1j5748yhJSyWFu47l5LEwx4+RPs61bmpDGQzQxRHrJshDRO2738vcYGb15IdaAdtaPTCEVfmMCtoc5SWDntT4S7RqlCsomSznG7aB5OheU4Z7kfkmMlFDNLWW0XCpzCD4ZeJhvl9yoaiaeqsWWaY6w/Oflx2b9jLgWngfbHfJTxiwBxNRH8zQzYWormre7hzZGSISTKErboZwYxxecO5F7EsrElDUDLIBbQbiZzgf8jEZ9QS3c=
+  template:
+    metadata:
+      name: gitops-token
+      namespace: flux-essi
+
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: essi-gitops
+  namespace: flux-essi
+spec:
+  interval: 5m0s
+  ref:
+    branch: main
+  secretRef:
+    name: gitops-token
+  url: https://github.com/ezbaa/GitOps.git
