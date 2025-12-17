@@ -81,9 +81,9 @@ spec:
       #               operator: Exists
 
       # Metrics exposed for Prometheus
-      metrics:
-        enabled: true
-        serviceMonitor:
-          enabled: true
-          additionalLabels:
-            release: "prometheus"
+#      metrics:
+#        enabled: true
+#        serviceMonitor:
+#          enabled: true
+#          additionalLabels:
+#            release: "prometheus"
