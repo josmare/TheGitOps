@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - production.yaml
   - source.yaml
+  - staging.yaml
