@@ -1,0 +1,11 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base/v1/
+
+patches:
+  - target:
+      kind: Ingress
+      name: me-me-ingress
+    path: patches-ingress.yaml
