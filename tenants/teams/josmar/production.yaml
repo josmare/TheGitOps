@@ -1,0 +1,53 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    toolkit.fluxcd.io/tenant: josmar-team
+  name: production-josmar
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    toolkit.fluxcd.io/tenant: josmar-team
+  name: josmar-team
+  namespace: production-josmar
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    toolkit.fluxcd.io/tenant: josmar-team
+  name: josmar-team-reconciler
+  namespace: production-josmar
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: gotk:josmar-team:reconciler
+  - kind: ServiceAccount
+    name: josmar-team
+    namespace: flux-josmar
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: josmar-production-fks
+  namespace: flux-josmar
+spec:
+  interval: 10m0s
+  path: ./gitops/josmar/envs/production
+  prune: true
+  serviceAccountName: josmar-team
+  targetNamespace: production-josmar
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
