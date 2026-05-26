@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: me-me-app
-          image: josmar/josmaredev
+          image: josmar/personal-page:latest
           imagePullPolicy: Always
           resources: {}
           ports:
