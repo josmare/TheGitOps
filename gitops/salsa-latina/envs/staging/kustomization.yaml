@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: staging-salsa-latina
+resources:
+  - ../../base/v1/
+images:
+  - name: registry.gitlab.com/josmarr/salsa-latina
+    newTag: main-7726de9f-14632740921
+patches:
+  - target:
+      kind: Ingress
+      name: salsa-latina-ingress
+    path: patches-ingress.yaml

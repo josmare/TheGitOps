@@ -1,0 +1,27 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    external-dns.alpha.kubernetes.io/hostname: PLACEHOLDER
+    no-nginx.ingress.kubernetes.io/auth-realm: realm string
+    kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 40m
+  name: salsa-latina-ingress
+spec:
+  rules:
+    - host: PLACEHOLDER
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: salsa-latina-svc
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - PLACEHOLDER
+      secretName: salsa-latina-certificate-1
