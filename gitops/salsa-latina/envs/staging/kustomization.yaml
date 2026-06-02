@@ -4,6 +4,7 @@ kind: Kustomization
 namespace: staging-salsa-latina
 resources:
   - ../../base/v1/
+  - basic-auth-secret.yaml
 images:
   - name: registry.gitlab.com/josmarr/salsa-latina
     newTag: main-7726de9f-14632740921

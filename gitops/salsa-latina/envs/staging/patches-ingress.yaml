@@ -7,3 +7,12 @@
 - op: replace
   path: /spec/tls/0/hosts/0
   value: salsa-latina.josmare.fyi
+- op: add
+  path: /metadata/annotations/nginx.ingress.kubernetes.io~1auth-type
+  value: basic
+- op: add
+  path: /metadata/annotations/nginx.ingress.kubernetes.io~1auth-secret
+  value: salsa-latina-basic-auth
+- op: add
+  path: /metadata/annotations/nginx.ingress.kubernetes.io~1auth-realm
+  value: "Authentication Required"
