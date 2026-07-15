@@ -1,0 +1,53 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    toolkit.fluxcd.io/tenant: personal-page-team
+  name: staging-personal-page
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    toolkit.fluxcd.io/tenant: personal-page-team
+  name: personal-page-team
+  namespace: staging-personal-page
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    toolkit.fluxcd.io/tenant: personal-page-team
+  name: personal-page-team-reconciler
+  namespace: staging-personal-page
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: gotk:personal-page-team:reconciler
+  - kind: ServiceAccount
+    name: personal-page-team
+    namespace: flux-personal-page
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: personal-page-staging-fks
+  namespace: flux-personal-page
+spec:
+  interval: 10m0s
+  path: ./gitops/personal-page/envs/staging
+  prune: true
+  serviceAccountName: personal-page-team
+  targetNamespace: staging-personal-page
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
