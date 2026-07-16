@@ -3,5 +3,4 @@ kind: Kustomization
 resources:
   - ../teams/essi
   - ../teams/josmar
-  - ../teams/personal-page
   - ../teams/salsa-latina
