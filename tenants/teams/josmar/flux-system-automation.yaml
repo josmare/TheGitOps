@@ -1,0 +1,70 @@
+---
+# Registry pull secret for registry.gitlab.com/josmarr — sealed from the
+# user-provided "flux-gitops-ips" PAT (read_registry, expires 2027-07-16).
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  annotations:
+    sealedsecrets.bitnami.com/cluster-wide: "true"
+  name: josmar-ips
+  namespace: flux-josmar
+spec:
+  encryptedData:
+    .dockerconfigjson: AgBypFWD62oXZBuVaSopJqJylav3KaIKNe7+oxLk706SRdQcIsX2IC15bHu44sbUlMdVgam8viCieNqQ+Ldqlw6ek5S0YiAv14Ycfy7cxsMeHbZNeUr3AfbjSUiFeFJKJ2VgCQ/GdYirHN1yN3KCCLg26qbBnm30kuWpjDLM4C2qDOtRhA4DVQUukgfXS2aogOiR8NRtLXZi62HcTU3HZLqRkn9L1IyYTNqXiRO4aJ/Y1m23TycG1983hBhBZtVREpULoSsM5cvDl78qpcy+srY3C9sJZOPOfbkgesx3ntUjLwsDw419ixJ4c1stYowwlEYOQWQaYRQliE610VEjC+dFhAMknMBKreWumo56yx/MZw0FoiRg3CATz4jiIxh7Q6QdS7dLuBaVB5n9359dGnxw92Ig85bp7UBXqpXlPTfUUFNHSWSnF3Nyf9moS9kzxyBJ3OUeS5FaqEzenaaSxxa2EKD2znEPnkJ9NL6mWfs1oFqeHocoiXSbtSXoltC/clDIC0nRhwp58MToK2b4/z372Ah5X5+D3Qxb0E72woyT4chuPLamVJIKwk9UO2uXBl1dhIEEXgDTGqUuIvSHKWbwAqDPAiYWB+Mdbys7I3iKZ7Y+kE/fVLbs/kAPbEYokGTdCD18qDYFgE4fiKdYp4n+OAjiCuwPzscH1eXw1evbkHW5zrsJK7oVcXGaweujme+1+Za0PiopV9uuVolT9gqN9wFtHwbNEWVe2SrRCUFV5YYgLVnm5SRXO0Wt+LyN13mspskwZF7nkVSXdn9ynasgvl4T8+xVbiaxgQQ7+z4mLZgiMW0U5L4QgFKTaIjFOGEOwyeO8umlDkPQVwItn1N/1vlC/HewizyomLgL5tzbBAWoE6z6UGnfvZvyTMdKgnVyFjV77nodr+kTG2OKkuVF733esMDLgTuN66OZDbGQsx5WCAN2Ukpq0GQjjaX+HIkgMEapIObvXh10/q2PQu3DZmpUst6e2jFZyBWnRc/FZQhsJbGz5JRX+felJw4j
+  template:
+    metadata:
+      annotations:
+        sealedsecrets.bitnami.com/cluster-wide: "true"
+      name: josmar-ips
+    type: kubernetes.io/dockerconfigjson
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: josmar-ir
+  namespace: flux-josmar
+spec:
+  image: registry.gitlab.com/josmarr/josmare-personal-page
+  interval: 5m0s
+  secretRef:
+    name: josmar-ips
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageUpdateAutomation
+metadata:
+  name: josmar-image-updates
+  namespace: flux-josmar
+spec:
+  git:
+    checkout:
+      ref:
+        branch: main
+    commit:
+      author:
+        email: flux@montel.fi
+        name: flux
+      messageTemplate: |-
+        flux: automated image update
+
+        Automation name: {{ .AutomationObject }}
+
+        Files:
+        {{ range $filename, $_ := .Changed.FileChanges -}}
+        - {{ $filename }}
+        {{ end -}}
+
+        Objects:
+        {{ range $resource, $_ := .Changed.Objects -}}
+        - {{ $resource.Kind }} {{ $resource.Name }}
+        {{ end -}}
+
+        Images:
+        {{ range .Changed.Changes -}}
+        - {{ .OldValue }} -> {{ .NewValue }}
+        {{ end -}}
+  interval: 5m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system

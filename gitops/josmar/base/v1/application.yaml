@@ -23,12 +23,16 @@ spec:
     spec:
       containers:
         - name: me-me-app
-          image: josmar/personal-page:latest
+          image: registry.gitlab.com/josmarr/josmare-personal-page:placeholder
           imagePullPolicy: Always
           resources: {}
           ports:
-            - containerPort: 80
-              name: portfolio-svc
+            # nginx-unprivileged in the new image listens on 8080
+            # (the Service already targets 8080).
+            - containerPort: 8080
+              name: web
+      imagePullSecrets:
+        - name: josmar-ips
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler

@@ -4,5 +4,6 @@ kind: Kustomization
 
 resources:
   - application.yaml
+  - config-secrets.yaml
   - networking-ingress.yaml
   - networking-svc.yaml
