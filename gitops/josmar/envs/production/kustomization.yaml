@@ -1,13 +1,10 @@
----
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base/v1/
-
 images:
   - name: registry.gitlab.com/josmarr/josmare-personal-page
-    newTag: main-0000000-0 # {"$imagepolicy": "flux-josmar:josmar-stg-ip:tag"}
-
+    newTag: main-55c77c99-15361715178 # {"$imagepolicy": "flux-josmar:josmar-stg-ip:tag"}
 patches:
   - target:
       kind: Ingress
