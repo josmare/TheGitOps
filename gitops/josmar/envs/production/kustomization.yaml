@@ -4,7 +4,7 @@ resources:
   - ../../base/v1/
 images:
   - name: registry.gitlab.com/josmarr/josmare-personal-page
-    newTag: main-f66568b2-15378011403 # {"$imagepolicy": "flux-josmar:josmar-stg-ip:tag"}
+    newTag: main-69a966e2-15378977107 # {"$imagepolicy": "flux-josmar:josmar-stg-ip:tag"}
 patches:
   - target:
       kind: Ingress
