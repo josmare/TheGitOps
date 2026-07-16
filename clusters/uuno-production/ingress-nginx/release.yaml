@@ -40,6 +40,7 @@ spec:
           service.beta.kubernetes.io/upcloud-load-balancer-config: |
             {
               "name": "uuno-production",
+              "plan": "essentials",
               "frontends": [
                 {
                   "name": "https",
