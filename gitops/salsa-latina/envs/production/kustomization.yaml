@@ -4,7 +4,7 @@ namespace: production-salsa-latina
 resources:
   - ../../base/v1/
 images:
-  - name: registry.gitlab.com/josmarr/salsa-latina/production
+  - name: registry.gitlab.com/josmarr/salsa-latina
     newTag: v0.1.2 # {"$imagepolicy": "flux-salsa-latina:salsa-latina-prod-ip:tag"}
 patches:
   - target:
