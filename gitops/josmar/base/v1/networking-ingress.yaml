@@ -4,7 +4,6 @@ kind: Ingress
 metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    external-dns.alpha.kubernetes.io/hostname: PLACEHOLDER
     no-nginx.ingress.kubernetes.io/auth-realm: realm string
     kubernetes.io/tls-acme: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: 40m

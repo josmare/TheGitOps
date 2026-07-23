@@ -1,7 +1,4 @@
 - op: replace
-  path: /metadata/annotations/external-dns.alpha.kubernetes.io~1hostname
-  value: salsa-latina.fi
-- op: replace
   path: /spec/rules/0/host
   value: salsa-latina.fi
 - op: replace
