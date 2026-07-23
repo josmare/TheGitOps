@@ -1,6 +1,6 @@
 - op: replace
   path: /spec/rules/0/host
-  value: josmare.fyi
+  value: salsa-latina.fi
 - op: replace
   path: /spec/tls/0/hosts/0
-  value: josmare.fyi
+  value: salsa-latina.fi

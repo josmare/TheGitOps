@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: production-salsa-latina
+resources:
+  - ../../base/v1/
+images:
+  - name: registry.gitlab.com/josmarr/salsa-latina
+    newTag: v0.1.0 # {"$imagepolicy": "flux-salsa-latina:salsa-latina-prod-ip:tag"}
+patches:
+  - target:
+      kind: Ingress
+      name: salsa-latina-ingress
+    path: patches-ingress.yaml
