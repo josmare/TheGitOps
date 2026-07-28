@@ -5,7 +5,7 @@ resources:
   - ../../base/v1/
 images:
   - name: registry.gitlab.com/josmarr/salsa-latina
-    newTag: v0.1.2 # {"$imagepolicy": "flux-salsa-latina:salsa-latina-prod-ip:tag"}
+    newTag: v1.2.1 # {"$imagepolicy": "flux-salsa-latina:salsa-latina-prod-ip:tag"}
 patches:
   - target:
       kind: Ingress
