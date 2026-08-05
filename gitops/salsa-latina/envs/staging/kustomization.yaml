@@ -13,3 +13,7 @@ patches:
       kind: Ingress
       name: salsa-latina-ingress
     path: patches-ingress.yaml
+  - target:
+      kind: Deployment
+      name: salsa-latina-app
+    path: patches-deployment.yaml
