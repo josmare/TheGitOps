@@ -1,0 +1,11 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: salsa-latina
+  namespace: databases
+spec:
+  name: salsalatina
+  owner: salsalatina
+  cluster:
+    name: shared-postgres

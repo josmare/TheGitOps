@@ -8,3 +8,10 @@ spec:
   instances: 1
   storage:
     size: 5Gi
+  managed:
+    roles:
+      - name: salsalatina
+        ensure: present
+        login: true
+        passwordSecret:
+          name: salsa-latina-db-credentials
