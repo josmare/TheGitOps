@@ -5,3 +5,148 @@ resources:
   - gotk-components.yaml
   - gotk-sync.yaml
   - kustomizations
+
+# Right-sized for the single DEV-1xCPU-2GB worker.
+# Stock Flux requests 100m CPU per controller (550m of the node's 1000m)
+# while measured usage across all six is 32m. The CPU limit is dropped so
+# git clones and helm renders are not throttled on a 1-core node; memory
+# limits are cut from 1Gi each (6Gi total, 3.5x the node) so a single
+# controller can no longer OOM the node.
+patches:
+  # Baseline for every Flux controller.
+  - target:
+      kind: Deployment
+      labelSelector: app.kubernetes.io/part-of=flux
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: flux-controller  # ignored; target selector above decides
+      spec:
+        template:
+          spec:
+            containers:
+              - name: manager
+                resources:
+                  requests:
+                    cpu: 25m
+                  limits:
+                    cpu: null
+                    memory: 256Mi
+
+  # Per-controller memory, from measured working set plus ~30% headroom.
+  - target:
+      kind: Deployment
+      name: kustomize-controller
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: kustomize-controller
+      spec:
+        template:
+          spec:
+            containers:
+              - name: manager
+                resources:
+                  requests:
+                    memory: 72Mi   # measured 58Mi
+                  limits:
+                    memory: 320Mi
+
+  # source-controller was OOMKilled (exit 137) under the old 1Gi limit, so
+  # it keeps the most generous ceiling of the six. Watch this one first.
+  - target:
+      kind: Deployment
+      name: source-controller
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: source-controller
+      spec:
+        template:
+          spec:
+            containers:
+              - name: manager
+                resources:
+                  requests:
+                    memory: 48Mi   # measured 27Mi
+                  limits:
+                    memory: 512Mi
+
+  - target:
+      kind: Deployment
+      name: image-reflector-controller
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: image-reflector-controller
+      spec:
+        template:
+          spec:
+            containers:
+              - name: manager
+                resources:
+                  requests:
+                    memory: 56Mi   # measured 42Mi
+                  limits:
+                    memory: 256Mi
+
+  - target:
+      kind: Deployment
+      name: helm-controller
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: helm-controller
+      spec:
+        template:
+          spec:
+            containers:
+              - name: manager
+                resources:
+                  requests:
+                    memory: 40Mi   # measured 25Mi
+                  limits:
+                    memory: 256Mi
+
+  - target:
+      kind: Deployment
+      name: notification-controller
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: notification-controller
+      spec:
+        template:
+          spec:
+            containers:
+              - name: manager
+                resources:
+                  requests:
+                    memory: 32Mi   # measured 24Mi
+                  limits:
+                    memory: 192Mi
+
+  - target:
+      kind: Deployment
+      name: image-automation-controller
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: image-automation-controller
+      spec:
+        template:
+          spec:
+            containers:
+              - name: manager
+                resources:
+                  requests:
+                    memory: 32Mi   # measured 22Mi
+                  limits:
+                    memory: 256Mi
