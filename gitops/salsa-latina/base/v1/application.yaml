@@ -25,7 +25,15 @@ spec:
         - name: salsa-latina-app
           image: registry.gitlab.com/josmarr/salsa-latina:placeholder
           imagePullPolicy: Always
-          resources: {}
+          # Static nginx site; measured working set 2.8Mi. Requests exist so
+          # the scheduler can see this pod at all and so it is not the first
+          # thing evicted under node memory pressure.
+          resources:
+            requests:
+              cpu: 10m
+              memory: 24Mi
+            limits:
+              memory: 64Mi
           ports:
             - containerPort: 80
               name: web
