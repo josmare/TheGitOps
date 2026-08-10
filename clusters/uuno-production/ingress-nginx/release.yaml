@@ -22,6 +22,15 @@ spec:
   values:
     controller:
       allowSnippetAnnotations: false
+      # Chart default requests 100m CPU; measured usage is 4m. Memory had no
+      # limit at all. On the critical path for all four sites, so the memory
+      # ceiling is kept comfortable.
+      resources:
+        requests:
+          cpu: 50m
+          memory: 96Mi   # measured 36Mi
+        limits:
+          memory: 256Mi
       config:
         allow-snippet-annotations: "false"
         annotations-risk-level: "Critical"

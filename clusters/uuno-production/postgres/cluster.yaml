@@ -8,6 +8,17 @@ spec:
   instances: 1
   storage:
     size: 5Gi
+  # Was BestEffort (no requests/limits) despite being the only stateful
+  # workload in the cluster, which made it a first-choice eviction target
+  # under node memory pressure -- 52 restarts. The memory request equals
+  # the limit so the floor is guaranteed; no CPU limit, so queries can
+  # burst on the single core.
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi   # measured 74Mi
+    limits:
+      memory: 256Mi
   managed:
     roles:
       - name: salsalatina

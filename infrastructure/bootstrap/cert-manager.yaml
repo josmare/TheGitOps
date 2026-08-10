@@ -30,6 +30,29 @@ spec:
     installCRDs: true
     prometheus:
       enabled: false
+    # All three cert-manager pods shipped with no requests or limits, so they
+    # ran BestEffort and were evicted first under pressure (58 / 39 / 90
+    # restarts). Values below are measured working set plus headroom.
+    resources:
+      requests:
+        cpu: 10m
+        memory: 48Mi   # measured 28Mi
+      limits:
+        memory: 128Mi
+    cainjector:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 48Mi   # measured 29Mi
+        limits:
+          memory: 128Mi
+    webhook:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 32Mi   # measured 11Mi
+        limits:
+          memory: 96Mi
     # config:
     #   featureGates:
     #     # Disable the use of Exact PathType in Ingress resources, to work around a bug in ingress-nginx

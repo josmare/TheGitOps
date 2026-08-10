@@ -18,3 +18,10 @@ spec:
     createNamespace: true
   interval: 6h0m0s
   targetNamespace: cnpg-system
+  values:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 48Mi   # measured 34Mi
+      limits:
+        memory: 128Mi
