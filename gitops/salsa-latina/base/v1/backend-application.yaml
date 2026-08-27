@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: salsa-latina-backend-app
+  name: salsa-latina-backend-app
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: salsa-latina-backend-app
+  strategy:
+    # No maxSurge: with a single replica, two pods running migrate at once
+    # against the same database is a real risk. Recreate-style is fine for
+    # a low-traffic backend — brief downtime beats a migration race.
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: salsa-latina-backend-app
+    spec:
+      containers:
+        - name: salsa-latina-backend-app
+          image: registry.gitlab.com/josmarr/salsa-latina-backend:placeholder
+          imagePullPolicy: Always
+          command:
+            - sh
+            - -c
+            - python manage.py migrate --noinput && exec gunicorn salsalatina.wsgi:application --bind 0.0.0.0:8000
+          envFrom:
+            - secretRef:
+                name: salsa-latina-backend-secrets
+          # Starting guess for a small Django+gunicorn process (single sync
+          # worker); no CPU limit, same reasoning as the frontend and
+          # shared-postgres — refine after measuring with `kubectl top pod`.
+          resources:
+            requests:
+              cpu: 15m
+              memory: 96Mi
+            limits:
+              memory: 256Mi
+          ports:
+            - containerPort: 8000
+              name: web
+      imagePullSecrets:
+        - name: josmar-ips
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
