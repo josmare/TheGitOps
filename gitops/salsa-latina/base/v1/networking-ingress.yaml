@@ -13,6 +13,37 @@ spec:
     - host: PLACEHOLDER
       http:
         paths:
+          # Backend paths (Django, same host — see salsalatina/urls.py).
+          # Kept ahead of the frontend catch-all for readability; nginx
+          # ingress sorts by path specificity regardless of list order.
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: salsa-latina-backend-svc
+                port:
+                  number: 8000
+          - path: /admin
+            pathType: Prefix
+            backend:
+              service:
+                name: salsa-latina-backend-svc
+                port:
+                  number: 8000
+          - path: /static
+            pathType: Prefix
+            backend:
+              service:
+                name: salsa-latina-backend-svc
+                port:
+                  number: 8000
+          - path: /media
+            pathType: Prefix
+            backend:
+              service:
+                name: salsa-latina-backend-svc
+                port:
+                  number: 8000
           - path: /
             pathType: Prefix
             backend:
