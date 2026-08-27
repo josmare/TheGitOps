@@ -8,7 +8,7 @@ images:
   - name: registry.gitlab.com/josmarr/salsa-latina
     newTag: v1.2.6 # {"$imagepolicy": "flux-salsa-latina:salsa-latina-prod-ip:tag"}
   - name: registry.gitlab.com/josmarr/salsa-latina-backend
-    newTag: placeholder # {"$imagepolicy": "flux-salsa-latina:salsa-latina-backend-prod-ip:tag"}
+    newTag: v0.1.0 # {"$imagepolicy": "flux-salsa-latina:salsa-latina-backend-prod-ip:tag"}
 patches:
   - target:
       kind: Ingress
