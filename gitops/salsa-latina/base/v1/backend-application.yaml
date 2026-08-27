@@ -48,7 +48,7 @@ spec:
             - containerPort: 8000
               name: web
       imagePullSecrets:
-        - name: josmar-ips
+        - name: salsa-latina-backend-ips
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
