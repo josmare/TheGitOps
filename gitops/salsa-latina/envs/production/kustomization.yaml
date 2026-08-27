@@ -3,9 +3,12 @@ kind: Kustomization
 namespace: production-salsa-latina
 resources:
   - ../../base/v1/
+  - backend-secrets.yaml
 images:
   - name: registry.gitlab.com/josmarr/salsa-latina
     newTag: v1.2.5 # {"$imagepolicy": "flux-salsa-latina:salsa-latina-prod-ip:tag"}
+  - name: registry.gitlab.com/josmarr/salsa-latina-backend
+    newTag: placeholder # {"$imagepolicy": "flux-salsa-latina:salsa-latina-backend-prod-ip:tag"}
 patches:
   - target:
       kind: Ingress

@@ -29,6 +29,18 @@ spec:
     name: josmar-ips
 
 ---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: salsa-latina-backend-ir
+  namespace: flux-salsa-latina
+spec:
+  image: registry.gitlab.com/josmarr/salsa-latina-backend
+  interval: 5m0s
+  secretRef:
+    name: josmar-ips
+
+---
 apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImageUpdateAutomation
 metadata:

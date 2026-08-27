@@ -4,9 +4,12 @@ namespace: staging-salsa-latina
 resources:
   - ../../base/v1/
   - basic-auth-secret.yaml
+  - backend-secrets.yaml
 images:
   - name: registry.gitlab.com/josmarr/salsa-latina
     newTag: main-4bdbc829-16142675240 # {"$imagepolicy": "flux-salsa-latina:salsa-latina-stg-ip:tag"}
+  - name: registry.gitlab.com/josmarr/salsa-latina-backend
+    newTag: placeholder # {"$imagepolicy": "flux-salsa-latina:salsa-latina-backend-stg-ip:tag"}
 patches:
   - target:
       kind: Ingress
