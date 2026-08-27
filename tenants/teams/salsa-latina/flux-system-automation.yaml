@@ -38,7 +38,26 @@ spec:
   image: registry.gitlab.com/josmarr/salsa-latina-backend
   interval: 5m0s
   secretRef:
-    name: josmar-ips
+    name: salsa-latina-backend-ips
+
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  annotations:
+    sealedsecrets.bitnami.com/cluster-wide: "true"
+  name: salsa-latina-backend-ips
+  namespace: flux-salsa-latina
+spec:
+  encryptedData:
+    .dockerconfigjson: AgBtjm8CoUD3Khz1g8nl2JXsi07WQ2jztUAipzZat0ybcurlgfQsTymqbKGOPLMhrUS0Oz7qAb2yCx3f0X95Vk0yjHslc8Bw50fSfb4BhsC65oHvvOAIMo4wlv/e/Tq/VaxiU+E8O+KmzCD9O98l+UmpbUXhVlk/X2aFCLjzJfy7HHkFgH3vDUSBtP3lZR0vOaMZ24I2CNcjN/2wEKiiwrGU3vb2iVoituxvVDjvIbSXDpstcV3lSBWJeKwivf3zJgyHigE/km88ETMXMfGbj+Z3/Aj3uqSDPSYAC5x2/Amk5jeILHDZx3YRLqhQc2vKoLOEBWPpxwQBPJBvBz39rAw8GNR6/wjatfjb5Om9wznb0JDd8M4JdNHE9ppV8uJnJDGTmiCrLFOFkNjm2KDNHNSX+oEtfz0MNgn4Lu5qXwofxWgl8sSemxQGoVWWuWl/1wc0YOfXp7yDu4/bmON20Ar2mEkRrAAa+UDmBthk/xRFINks3bgcCjtdgNBZef11/XxDgOAYV+DfiuLRPGFdqUjmDvA/q1zsoH2WAkUkhUG0Wv+pEzJ/Ei5h3i9pKXLUv+i96PUZ0qD62SYLWcPkrnVpiwUy0MmtH/rtoLhijUxV7M/DiT1pcpSRvMlCai7aHFUnJKgv0gxFK5a7tVdFP3Zge0C+Rci1TOqZOPKU08faxC4gVwG8pHfsZ4dplOsNlGQ8+E6bQ+o50+jI0wtI/as+Dd1ZmSqOm6ogVAph3KLBlHQTUpHFhsg+ai+wr/8QtHeB+2Jtxv7MA2tisF+W3zprQa/kbSLzQh/DLs+CA0tyK+KMOCC3o7lS5OEnlRkLTbiDsOO2/BO+9Or4LIo/omegQihM/mPQhmk=
+  template:
+    metadata:
+      annotations:
+        sealedsecrets.bitnami.com/cluster-wide: "true"
+      name: salsa-latina-backend-ips
+      namespace: flux-salsa-latina
+    type: kubernetes.io/dockerconfigjson
 
 ---
 apiVersion: image.toolkit.fluxcd.io/v1
