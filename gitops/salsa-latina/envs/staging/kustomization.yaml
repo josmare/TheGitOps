@@ -6,7 +6,7 @@ resources:
   - basic-auth-secret.yaml
 images:
   - name: registry.gitlab.com/josmarr/salsa-latina
-    newTag: main-457e5a56-16141407380 # {"$imagepolicy": "flux-salsa-latina:salsa-latina-stg-ip:tag"}
+    newTag: main-4bdbc829-16142675240 # {"$imagepolicy": "flux-salsa-latina:salsa-latina-stg-ip:tag"}
 patches:
   - target:
       kind: Ingress
