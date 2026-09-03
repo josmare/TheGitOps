@@ -7,7 +7,7 @@ resources:
   - backend-secrets.yaml
 images:
   - name: registry.gitlab.com/josmarr/salsa-latina
-    newTag: main-7a7102de-16276670167 # {"$imagepolicy": "flux-salsa-latina:salsa-latina-stg-ip:tag"}
+    newTag: main-053a6129-16279046507 # {"$imagepolicy": "flux-salsa-latina:salsa-latina-stg-ip:tag"}
   - name: registry.gitlab.com/josmarr/salsa-latina-backend
     newTag: main-0ffb4559-16276680545 # {"$imagepolicy": "flux-salsa-latina:salsa-latina-backend-stg-ip:tag"}
 patches:
