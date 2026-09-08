@@ -4,7 +4,7 @@ resources:
   - ../../base/v1/
 images:
   - name: registry.gitlab.com/josmarr/lohko
-    newTag: placeholder # {"$imagepolicy": "flux-josmar:lohko-stg-ip:tag"}
+    newTag: main-d5bbabb6-16362856062 # {"$imagepolicy": "flux-josmar:lohko-stg-ip:tag"}
 patches:
   - target:
       kind: Ingress
