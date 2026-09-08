@@ -16,7 +16,7 @@ spec:
   image: registry.gitlab.com/josmarr/lohko
   interval: 5m0s
   secretRef:
-    name: josmar-ips
+    name: lohko-ips
 
 ---
 # Tracks the main-branch tags the CI release:staging job publishes, shaped
@@ -52,3 +52,23 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
+
+---
+# Same ciphertext as gitops/lohko/base/v1/config-secrets.yaml, placed here so the
+# ImageRepository above can authenticate its registry scans from flux-josmar.
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  annotations:
+    sealedsecrets.bitnami.com/cluster-wide: "true"
+  name: lohko-ips
+  namespace: flux-josmar
+spec:
+  encryptedData:
+    .dockerconfigjson: AgCbm2ZjEpqk7X2HWDnuVgRxgcii4Uyn6A/lYB0f2tgID0ey+Dn9IKD2ID0XeioPE9tjjwwaQM1D6sFejiTH46MSM49SJf2NWQ3LihDU3gYHpHPv+/cbfn55cu5b3iPJ0FuEEqEdRVgDsxPJPbFoL1qEDyiwYQsqlG1G0/+1tuMDI/SsT1j8AyU5vAY4934kQQHqaHROS79+cV2kqj1u7SKAyUJSo5j2KnVMcWBkvu/9Jv3IVy0H8C/KtKpDPW9QlugQ/iG4qN6WmXRrCeBtEeiHArj+EkQdTNTEl4M6Ks8q8SUea6gN6Y1PZRUNYC4awIXze++NhmePotDOCAQ1IiX6kqTMxu+1gTvdDHX6KBBaKUQtWnO/Pxf/BkQj6KBubsDZ0rts+GJKmeCk8yMhSz8iR+QBOwjYC9PKkiQE7LXMwjyOXSFfdux/oBBsdDlBTvVkqVjvplJDZAm+spx1rikjivBAS1SNYYUziKxTyd4CxmzdYRMp1SzYdQuZW9FMW9cxvip33UsiLBfDWCC4XETjVwJyBOVjYWnWSlOVr/pmwrRLJXkhhVJqOTuUEE0y02n48FtmIN9kgyx8d1PgmUqa1kibLdPmuNBYfKOH7+asxVNnnWr/MkRpdPZfh1Rqi2jySBpfrrbjsVH4O4t3P1YXc3HgC0u/hAwQ+LfR+SPa0jb29q7HgkrZj0dfiFjDkwu86MojulDDYNiZwcrRxz7m05XvdzBP4MymlVFXzmhTeWqTaNeG0zWKgDSjzjwODiL8gUMH+a0lKhvBAinNmPlf3c4u7joMU7V+J5jMjfySlDJzbfmEiR6tr9gcRggaBsy/hTjvutzuFZ887SUquQfkm/KBSTwbjfT6clTXPFBAb6obF2adllpG+u0pBIFtOc8QupW1/4xLuX11F/yLXDYiaZYehQgaDGB8SObz1IZRwN/wR6x/0cVu+XWj6xpsTCdoX9K5Jt89RTi/dSuBgT+MltpTMSlSmPcyCt90yz15NMIZu3QH0z4mdJ80/yOW
+  template:
+    metadata:
+      annotations:
+        sealedsecrets.bitnami.com/cluster-wide: "true"
+      name: lohko-ips
+    type: kubernetes.io/dockerconfigjson

@@ -50,7 +50,7 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 30
       imagePullSecrets:
-        - name: josmar-ips
+        - name: lohko-ips
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
