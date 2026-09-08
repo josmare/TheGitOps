@@ -4,5 +4,6 @@ resources:
   - flux-system-automation.yaml
 #  - image-policy-production.yaml
   - image-policy-staging.yaml
+  - lohko.yaml
   - production.yaml
   - source.yaml

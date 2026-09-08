@@ -1,0 +1,54 @@
+---
+# Lohko rides along in the josmar tenant rather than bootstrapping one of its
+# own. It reuses the namespace, the josmar-team service account, the RoleBinding
+# and the josmar-ips pull secret that this tenant already sets up, so the only
+# new objects are the image tracking below and one Kustomization.
+#
+# The tenant's existing ImageUpdateAutomation scans the whole repo for
+# $imagepolicy markers, so it picks up the lohko overlay with no second
+# automation object.
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: lohko-ir
+  namespace: flux-josmar
+spec:
+  image: registry.gitlab.com/josmarr/lohko
+  interval: 5m0s
+  secretRef:
+    name: josmar-ips
+
+---
+# Tracks the main-branch tags the CI release:staging job publishes, shaped
+# main-<short-sha>-<job-id>. The job id is the numerical sort key.
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: lohko-stg-ip
+  namespace: flux-josmar
+spec:
+  imageRepositoryRef:
+    name: lohko-ir
+  filterTags:
+    pattern: '^main-[a-fA-F0-9]+-(?P<ts>.*)'
+    extract: '$ts'
+  policy:
+    numerical:
+      order: asc
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: lohko-production-fks
+  namespace: flux-josmar
+spec:
+  interval: 10m0s
+  path: ./gitops/lohko/envs/production
+  prune: true
+  serviceAccountName: josmar-team
+  targetNamespace: production-josmar
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
