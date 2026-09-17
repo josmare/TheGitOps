@@ -1,0 +1,11 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: aika-staging
+  namespace: databases
+spec:
+  name: aika_staging
+  owner: aika
+  cluster:
+    name: shared-postgres  

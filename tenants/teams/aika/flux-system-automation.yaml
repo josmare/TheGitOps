@@ -1,0 +1,71 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  annotations:
+    sealedsecrets.bitnami.com/cluster-wide: "true"
+  name: aika-ips
+  namespace: flux-aika
+spec:
+  encryptedData:
+    .dockerconfigjson: AgAulVM6gqSviBzq/xzEPZjtJ3Q3bH0ylv8/TgwXVKVsc6Czw1kThUPFuKrczh1ebP9VjGcbwlb+eP28A/WA9Z84SlkJCy1a+QRDbnL/fQOBQyQ2QMr3XntwPMhzT2EnZ0MBwlVzyb0oezYsjdlEeFM/uL5sqgJy04+l1E9LTl6WJXdOrP6A3pu2pSE+gvH8P0qlDen+TLyezbsQb/dq2dN+Kq6QWvTbQoxmE9NchRCorTj8oEAnIEOCHea76+b3ezNPAgWWvy7GVpM/fEoiFb4NqNtKOF5oqhqGMwINOF2BSo65UA5TtmMcMQ6VLtf+Hd+fEl4HQtJr/lA6HTi0sblBS8hRZ2uasN+th95jQoaGnVmjzY7vd8cOkNwXJ0qLEO8ub9yv9+8w5kPrzQKGAwEgQNAK1uKihSCnpgKYiMsiYHE1IPe43YPQI4uy8LctctptAXrdHmhB7wShWkVMLL6j2IKEva+RL2qa5D96QyLFtmKN66ECNaOW7+IZng5cZ6foUYYGUyP62vmZz4nW6SG5maOUjGujdK+2vVE+1iep+yTpPqLQdyKDRadWOBv+1HK3PnPvzlOBgIOCNYD764tJEw87Ts5rNwUpbmm2Z5JVhO/Ob80kzSclMp45+sx1xOFjgoCLep4vgyrAQZTvm+e/RhGn75Rv5BboSE5fwzPhjry3UAlOsvI9+eLNoPU+T94zhTjuQ8kZEReGkSH7In+9aJTwBvLuFS3Wvx8l0GwPoxpqdN1qnRM40hixiA6J/P/W66UC8gMqoUo9PJ6NSssC/Wu4d172Jwe+QbyQC9AZ4WzNAYJCeEa0jFmFwtFk6FloKQllhSHT+1Vb6NzlAH8R3znvB5ZBICUr+LCtamLVuF52q5M2QN77e5T92740WdqsK+e0rNvJT9A+WUXIfjPMMeoQ3HipX9p3HwqyHjDRJxgxJJR6FlB+gy1y8j5CXVPRjGHOdno=
+  template:
+    metadata:
+      annotations:
+        sealedsecrets.bitnami.com/cluster-wide: "true"
+      name: aika-ips
+      namespace: flux-aika
+    type: kubernetes.io/dockerconfigjson
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: aika-ir
+  namespace: flux-aika
+spec:
+  image: registry.gitlab.com/ezbaa/aika
+  interval: 5m0s
+  secretRef:
+    name: aika-ips
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageUpdateAutomation
+metadata:
+  name: aika-image-updates
+  namespace: flux-aika
+spec:
+  git:
+    checkout:
+      ref:
+        branch: main
+    commit:
+      author:
+        email: flux@montel.fi
+        name: flux
+      messageTemplate: |-
+        flux: automated image update
+
+        Automation name: {{ .AutomationObject }}
+
+        Files:
+        {{ range $filename, $_ := .Changed.FileChanges -}}
+        - {{ $filename }}
+        {{ end -}}
+
+        Objects:
+        {{ range $resource, $_ := .Changed.Objects -}}
+        - {{ $resource.Kind }} {{ $resource.Name }}
+        {{ end -}}
+
+        Images:
+        {{ range .Changed.Changes -}}
+        - {{ .OldValue }} -> {{ .NewValue }}
+        {{ end -}}
+  interval: 5m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+#  update:
+#    path: ./gitops/aika
+#    strategy: Setters

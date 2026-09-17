@@ -26,3 +26,8 @@ spec:
         login: true
         passwordSecret:
           name: salsa-latina-db-credentials
+      - name: aika
+        ensure: present
+        login: true
+        passwordSecret:
+          name: aika-db-credentials

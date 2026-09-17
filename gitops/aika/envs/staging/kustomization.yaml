@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: staging-aika
+resources:
+  - ../../base/v1/
+  - aika-secrets.yaml
+images:
+  - name: registry.gitlab.com/ezbaa/aika
+    newTag: placeholder # {"$imagepolicy": "flux-aika:aika-stg-ip:tag"}
