@@ -6,4 +6,4 @@ resources:
   - aika-secrets.yaml
 images:
   - name: registry.gitlab.com/ezbaa/aika
-    newTag: main-c5cb664-1789653689 # {"$imagepolicy": "flux-aika:aika-stg-ip:tag"}
+    newTag: main-c5cb664-1789654432 # {"$imagepolicy": "flux-aika:aika-stg-ip:tag"}
