@@ -1,0 +1,15 @@
+- op: replace
+  path: /spec/rules/0/host
+  value: aika-staging.essiantola.com
+- op: replace
+  path: /spec/tls/0/hosts/0
+  value: aika-staging.essiantola.com
+- op: add
+  path: /metadata/annotations/nginx.ingress.kubernetes.io~1auth-type
+  value: basic
+- op: add
+  path: /metadata/annotations/nginx.ingress.kubernetes.io~1auth-secret
+  value: aika-basic-auth
+- op: add
+  path: /metadata/annotations/nginx.ingress.kubernetes.io~1auth-realm
+  value: "Authentication Required"

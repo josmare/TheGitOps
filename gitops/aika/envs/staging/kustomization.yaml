@@ -4,6 +4,12 @@ namespace: staging-aika
 resources:
   - ../../base/v1/
   - aika-secrets.yaml
+  - basic-auth-secret.yaml
 images:
   - name: registry.gitlab.com/ezbaa/aika
     newTag: main-4d8af38-1789655628 # {"$imagepolicy": "flux-aika:aika-stg-ip:tag"}
+patches:
+  - target:
+      kind: Ingress
+      name: aika-ingress
+    path: patches-ingress.yaml

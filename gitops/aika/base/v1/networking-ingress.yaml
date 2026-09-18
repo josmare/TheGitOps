@@ -1,0 +1,24 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    kubernetes.io/tls-acme: "true"
+  name: aika-ingress
+spec:
+  rules:
+    - host: PLACEHOLDER
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: aika-backend-svc
+                port:
+                  number: 8000
+  tls:
+    - hosts:
+        - PLACEHOLDER
+      secretName: aika-certificate-1

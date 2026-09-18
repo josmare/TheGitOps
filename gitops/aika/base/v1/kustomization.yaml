@@ -6,3 +6,4 @@ resources:
   - backend-application.yaml
   - backend-svc.yaml
   - config-secrets.yaml
+  - networking-ingress.yaml
