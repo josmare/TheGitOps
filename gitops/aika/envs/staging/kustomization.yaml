@@ -7,7 +7,7 @@ resources:
   - basic-auth-secret.yaml
 images:
   - name: registry.gitlab.com/ezbaa/aika
-    newTag: main-84cf5c19-2882156890 # {"$imagepolicy": "flux-aika:aika-stg-ip:tag"}
+    newTag: main-2cf46806-2882212553 # {"$imagepolicy": "flux-aika:aika-stg-ip:tag"}
 patches:
   - target:
       kind: Ingress
