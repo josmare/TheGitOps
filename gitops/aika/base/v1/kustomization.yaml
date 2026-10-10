@@ -7,3 +7,5 @@ resources:
   - backend-svc.yaml
   - config-secrets.yaml
   - networking-ingress.yaml
+  - frontend-application.yaml
+  - frontend-svc.yaml

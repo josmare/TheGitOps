@@ -28,6 +28,17 @@ spec:
   secretRef:
     name: aika-ips
 ---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: aika-frontend-ir
+  namespace: flux-aika
+spec:
+  image: registry.gitlab.com/ezbaa/aika-frontend
+  interval: 5m0s
+  secretRef:
+    name: aika-ips
+---
 apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImageUpdateAutomation
 metadata:

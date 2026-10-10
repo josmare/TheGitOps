@@ -8,6 +8,8 @@ resources:
 images:
   - name: registry.gitlab.com/ezbaa/aika
     newTag: main-19a62648-2923045252 # {"$imagepolicy": "flux-aika:aika-stg-ip:tag"}
+  - name: registry.gitlab.com/ezbaa/aika-frontend
+    newTag: main-19a62648-2923045252 # {"$imagepolicy": "flux-aika:aika-frontend-stg-ip:tag"}
 patches:
   - target:
       kind: Ingress
