@@ -4,7 +4,7 @@ resources:
   - ../../base/v1/
 images:
   - name: registry.gitlab.com/josmarr/iv
-    newTag: main-0000000-0 # {"$imagepolicy": "flux-josmar:iv-stg-ip:tag"}
+    newTag: main-ba2a61b7-17115574807 # {"$imagepolicy": "flux-josmar:iv-stg-ip:tag"}
 patches:
   - target:
       kind: Ingress
