@@ -1,0 +1,22 @@
+- op: replace
+  path: /spec/rules/0/host
+  value: ivanbeltrandesigns.com
+- op: add
+  path: /spec/rules/-
+  value:
+    host: www.ivanbeltrandesigns.com
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: iv-svc
+              port:
+                number: 80
+- op: replace
+  path: /spec/tls/0/hosts/0
+  value: ivanbeltrandesigns.com
+- op: add
+  path: /spec/tls/0/hosts/-
+  value: www.ivanbeltrandesigns.com

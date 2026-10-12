@@ -1,0 +1,24 @@
+---
+# The pod only serves static files: accept traffic on 8080 from ingress-nginx
+# and nothing else, and allow no egress (no DB, no outbound calls; Firebase is
+# called from the visitor's browser, not from the pod). DNS is not needed.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: iv-app
+spec:
+  podSelector:
+    matchLabels:
+      app: iv-app
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - port: 8080
+          protocol: TCP
+  egress: []

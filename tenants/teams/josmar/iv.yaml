@@ -1,0 +1,70 @@
+---
+# iv (IvanBeltran) rides along in the josmar tenant, same as lohko: it reuses the
+# production-josmar namespace, the josmar-team service account and its
+# RoleBinding, so the only new objects are the image tracking below and one
+# Kustomization. The tenant's existing ImageUpdateAutomation scans the whole repo
+# for $imagepolicy markers, so it picks up the iv overlay with no extra object.
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: iv-ir
+  namespace: flux-josmar
+spec:
+  image: registry.gitlab.com/josmarr/iv
+  interval: 5m0s
+  secretRef:
+    name: iv-ips
+
+---
+# Tracks the main-branch tags the CI release:staging job publishes, shaped
+# main-<short-sha>-<job-id>. The job id is the numerical sort key.
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: iv-stg-ip
+  namespace: flux-josmar
+spec:
+  imageRepositoryRef:
+    name: iv-ir
+  filterTags:
+    pattern: '^main-[a-fA-F0-9]+-(?P<ts>.*)'
+    extract: '$ts'
+  policy:
+    numerical:
+      order: asc
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: iv-production-fks
+  namespace: flux-josmar
+spec:
+  interval: 10m0s
+  path: ./gitops/iv/envs/production
+  prune: true
+  serviceAccountName: josmar-team
+  targetNamespace: production-josmar
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+
+---
+# Same ciphertext as gitops/iv/base/v1/config-secrets.yaml, placed here so the
+# ImageRepository above can authenticate its registry scans from flux-josmar.
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  annotations:
+    sealedsecrets.bitnami.com/cluster-wide: "true"
+  name: iv-ips
+spec:
+  encryptedData:
+    .dockerconfigjson: AgBmS/u007TIP/6PtcDZy8yLydmHjH4Pld69Rc1SARK4PxLyOrAPNskFuZ9oBevDyqf7cw5DvmV1UhG3hCDsxyVpyoylSPaDauAD+2PZF60yp4I2QNyB8ji+bIE6Wxl1eq4XtKD1Es+cwJbd1XSs4l9cnm5R9+vU553iDzhmvR+GPLZw6umk0yamlTIARrwwGDUA6BMzro5yxCmIFAMOp3T746tOJwxXKoNfGv94pHGvW0i+X659p7myHTOJ3ggCqP4ia6LqRkUn7rrj4V76v1cmPjvvb4VIubTpPZ0hE2YZ5oQ+3ouoJLICg07mYVy0lSv0I3sklNHZ0QVvTg5PVGkpOR5jHt62i7EihWQRygg2V4hcdaQ/l3Eh74IcakhwN36TP80ju1BM7weMIP6lAQnayue0Zv+vX6DdhZY2LMoHTUoSL1N79lGFrpODa9vfqbPDwwNDqcgDK8ETc4GWjsr2E1VBTvsJiI7BVRVdajEoYRQ8x0WpY2oJZuQFfriRcrMndMQJJtst3ougFOtANNYZMINDrlcGlw5YD4uaKOs4HwCgQGrS4BClnKu9YTRKKMVzjrbl6rM+2ADT4aQFqAbbVNeVdF+VDzJ0xUyJEwtKQTFf/MU3RUrZYwA4ajHPVILLlAIQW86daT+F+FUq8f3ARx1bAfOdJxtaXzRj+U+PTqedYIKaSowUP5V70EYApLWiWOKqIV/FIrelSu3EWGHZk41kczpvPQIxLzp0YTIHhm9rE5B1kc2wVggxzxP5IGS9JWLIN5rVl6aMpaNP7F/abAfJmiDvXq9fDTCpU1lozofB8X0nuRtIyLs+9487RNmSSRcqYNKpmOQiJT6cJXAJSXLX72Mx7Lqkjn7gfW5stgwO+/NEZLZ8BGNFS0LNHko+RtKZeX4rJhxAUbcLhr6hsMftedjzZWxt/cqQDuXslc48+lD7V+IP7FMvqoRmHbH6t0B8IP9uglnWXV0fZdlKe53YhkAbb9teGrXtMbR2WeMiG4CRq3rbyTetNEqI4CVM7RRREQ==
+  template:
+    metadata:
+      annotations:
+        sealedsecrets.bitnami.com/cluster-wide: "true"
+      name: iv-ips
+    type: kubernetes.io/dockerconfigjson
