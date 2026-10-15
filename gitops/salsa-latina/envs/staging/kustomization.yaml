@@ -15,3 +15,8 @@ patches:
       kind: Ingress
       name: salsa-latina-ingress
     path: patches-ingress.yaml
+replicas:
+  - count: 0
+    name: salsa-latina
+  - count: 0
+    name: salsa-latina-backend

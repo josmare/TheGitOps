@@ -10,3 +10,7 @@ patches:
       kind: Ingress
       name: lohko-ingress
     path: patches-ingress.yaml
+replicas:
+  - count: 0
+    name: lohko-app
+
