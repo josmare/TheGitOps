@@ -18,13 +18,6 @@ spec:
                 name: aika-backend-svc
                 port:
                   number: 8000
-          - path: /api
-            pathType: Prefix
-            backend:
-              service:
-                name: aika-backend-svc
-                port:
-                  number: 8000
           - path: /static
             pathType: Prefix
             backend:
@@ -43,3 +36,24 @@ spec:
     - hosts:
         - PLACEHOLDER
       secretName: aika-certificate-1
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aika-api-ingress
+spec:
+  rules:
+    - host: PLACEHOLDER
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: aika-backend-svc
+                port:
+                  number: 8000
+  tls:
+    - hosts:
+        - PLACEHOLDER
+      secretName: aika-certificate-1      
