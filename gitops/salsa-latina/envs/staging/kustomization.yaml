@@ -15,8 +15,11 @@ patches:
       kind: Ingress
       name: salsa-latina-ingress
     path: patches-ingress.yaml
+# Names must match the Deployments exactly (salsa-latina-app /
+# salsa-latina-backend-app); the old short names never matched, so staging
+# kept running at the base's replicas: 1.
 replicas:
   - count: 0
-    name: salsa-latina
+    name: salsa-latina-app
   - count: 0
-    name: salsa-latina-backend
+    name: salsa-latina-backend-app

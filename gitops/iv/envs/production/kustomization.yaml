@@ -10,3 +10,8 @@ patches:
       kind: Ingress
       name: iv-ingress
     path: patches-ingress.yaml
+# Scaled down 2026-11-23 to free memory on the single 2 GB uuno node; the real
+# ivanbeltrandesigns.com is served from Firebase, not from here.
+replicas:
+  - count: 0
+    name: iv-app
