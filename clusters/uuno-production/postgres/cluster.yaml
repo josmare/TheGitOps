@@ -4,6 +4,12 @@ kind: Cluster
 metadata:
   name: shared-postgres
   namespace: databases
+  # Hibernated 2026-11-23 to free memory on the single 2 GB uuno node. CNPG
+  # deletes the pod but keeps the PVC (shared-postgres-1, 5Gi) and its data.
+  # Set to "off" (or remove the annotation) to bring it back. While it is on,
+  # prod salsa-latina's backend cannot reach its DB (salsalatina).
+  annotations:
+    cnpg.io/hibernation: "on"
 spec:
   instances: 1
   storage:
